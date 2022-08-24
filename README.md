@@ -4,7 +4,7 @@
 
 <ol type="1">
    <li>
-   <a href="https://wiki.python.org.br/ListaDeExercicios">PythonBrasil</a>
+   <a>PythonBrasil</a>
         <ol type="a">
             <li><a href="EstruturaSequencial/" >EstruturaSequencial</a></li>
             <li><a href="EstruturaDeDecisao/" >EstruturaDeDecisao</a></li>
@@ -19,8 +19,15 @@
    </li>
     
    <li>
-       <a href="https://cursoemvideo.com/">Cursoemvideo</a>
+       <a>Cursoemvideo</a>
+        <ol type="a">
+            <li><a href="exercicios-cursoemvideo/" >Lista com 115 exercicios em Python</a></li>
+        </ol>
    </li>
+   <li><a href="baixar-musica-do-yt/" >Programa que baixa musica do YouTube com Python</a></li>
+   
+   
+   
  </ol>
 
 
