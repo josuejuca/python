@@ -6,7 +6,11 @@ WIDTH = 600
 HEIGHT = 400
 DELAY = 100
 DOT_SIZE = 20
-SCORE_SIZE = 40
+SCORE_SIZE = 10
+SCORE_X = 50
+SCORE_Y = 20
+SNAKE_COLOR = "green"
+FOOD_COLOR = "red"
 
 # Inicialização da janela
 window = tk.Tk()
@@ -17,7 +21,7 @@ window.resizable(False, False)
 canvas = tk.Canvas(window, width=WIDTH, height=HEIGHT, bg="black")
 canvas.pack()
 
-# Classe da cobra
+# Classe da Cobra
 class Snake:
     def __init__(self):
         self.segments = [(100, 100), (80, 100), (60, 100)]
@@ -45,7 +49,7 @@ class Snake:
 
         self.segments.insert(0, (x, y))
 
-        if head == self.food:
+        if self.segments[0] == self.food:
             self.score += 1
             self.food = self.create_food()
         else:
@@ -61,16 +65,30 @@ class Snake:
         elif direction == "Down" and self.direction != "Up":
             self.direction = direction
 
+    def check_collision(self):
+        head = self.segments[0]
+        x, y = head
+
+        if x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT:
+            return True
+
+        for segment in self.segments[1:]:
+            if segment == head:
+                return True
+
+        return False
+
     def draw(self):
         canvas.delete("all")
 
         for segment in self.segments:
             x, y = segment
-            canvas.create_rectangle(x, y, x + DOT_SIZE, y + DOT_SIZE, fill="white")
+            canvas.create_rectangle(x, y, x + DOT_SIZE, y + DOT_SIZE, fill=SNAKE_COLOR)
 
-        canvas.create_text(SCORE_SIZE, SCORE_SIZE, text=f"Score: {self.score}", fill="white", font=("Arial", 14), anchor="nw")
+        x, y = self.food
+        canvas.create_oval(x, y, x + DOT_SIZE, y + DOT_SIZE, fill=FOOD_COLOR)
 
-        canvas.create_rectangle(self.food[0], self.food[1], self.food[0] + DOT_SIZE, self.food[1] + DOT_SIZE, fill="red")
+        canvas.create_text(SCORE_X, SCORE_Y, text=f"Pontos: {self.score}", fill="white", font=("Arial", SCORE_SIZE))
 
 # Funções de controle
 def on_key_press(event):
@@ -86,15 +104,18 @@ def on_key_press(event):
 # Inicialização do jogo
 snake = Snake()
 
-# Eventos do teclado
+# Configuração do evento de pressionar tecla
 window.bind("<KeyPress>", on_key_press)
 window.focus_set()
 
 # Loop principal do jogo
 def game_loop():
-    snake.move()
-    snake.draw()
-    window.after(DELAY, game_loop)
+    if not snake.check_collision():
+        snake.move()
+        snake.draw()
+        window.after(DELAY, game_loop)
+    else:
+        canvas.create_text(WIDTH / 2, HEIGHT / 2, text="Você perdeu!", fill="white", font=("Arial", 20))
 
 # Início do jogo
 game_loop()
